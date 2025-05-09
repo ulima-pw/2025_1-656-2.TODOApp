@@ -4,8 +4,10 @@ import Navegacion from "../components/Navegacion"
 import Titulo from "../components/Titulo"
 
 const MainPage = () => {
+    const titulo = "TODO App"
+
     return <div className="container">
-        <Titulo />
+        <Titulo texto={ titulo }/>
         <Navegacion />
         <Formulario />
         <ListaTODOs />
