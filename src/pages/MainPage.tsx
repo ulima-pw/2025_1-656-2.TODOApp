@@ -8,7 +8,8 @@ const MainPage = () => {
 
     const lista : TODO[] = [
         { id : 1, descripcion : "Ir al cine" },
-        { id : 2, descripcion : "Limpiar la casa"}
+        { id : 2, descripcion : "Limpiar la casa"},
+        { id : 3, descripcion : "Dormir"}
     ]
 
     return <div className="container">
