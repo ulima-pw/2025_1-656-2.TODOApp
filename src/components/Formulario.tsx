@@ -1,6 +1,10 @@
 import { useState } from "react"
 
-const Formulario = () => {
+interface FormularioProps {
+    agregar : (texto : string) => void
+}
+
+const Formulario = (props : FormularioProps) => {
     const [ textoTODO, setTextoTODO ] = useState<string>("")
 
     const textoTODOOnChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +23,7 @@ const Formulario = () => {
                 <button className="btn btn-success" 
                     type="button"
                     onClick={ () => {
-                        console.log("Debe agregar elemento: " + textoTODO)
+                        props.agregar(textoTODO)
                     } }>
                         Agregar
                 </button>
