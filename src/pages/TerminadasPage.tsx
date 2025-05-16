@@ -8,7 +8,7 @@ const TerminadasPage = () => {
     ]
     return <div className="container">
         <Titulo texto={ "Histórico" }/>
-        <Navegacion />
+        <Navegacion paginaActual={ Pagina.TERMINADAS } />
         <ListaTODOs data={ listaMock } paginaActual={ Pagina.TERMINADAS } />
     </div>
 }

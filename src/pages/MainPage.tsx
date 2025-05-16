@@ -26,7 +26,7 @@ const MainPage = () => {
 
     return <div className="container">
         <Titulo texto={ titulo }/>
-        <Navegacion />
+        <Navegacion paginaActual={ Pagina.MAIN }/>
         <Formulario agregar={ agregarTODO }/>
         <ListaTODOs data={ lista } paginaActual={ Pagina.MAIN }/>
     </div>
