@@ -3,8 +3,13 @@ export interface TODO {
     descripcion : string
 }
 
+export enum Pagina {
+    MAIN, TERMINADAS
+}
+
 interface ListaTODOsProps {
     data : TODO[]
+    paginaActual : Pagina
 }
 
 const ListaTODOs = (props : ListaTODOsProps) => {
@@ -16,7 +21,10 @@ const ListaTODOs = (props : ListaTODOsProps) => {
                         <div className="ms-2 me-auto">
                             { elemento.descripcion }
                         </div>
-                        <input className="form-check-input" type="checkbox" />
+                        {
+                            props.paginaActual == Pagina.MAIN  ? <input className="form-check-input" type="checkbox" /> : ""
+                        }
+                        
                     </li>
                 })
             }
