@@ -7,7 +7,7 @@ const TerminadasPage = () => {
         { id : 1, descripcion : "Jugar futbol"}
     ]
     return <div className="container">
-        <Titulo texto={ "Histórico" }/>
+        <Titulo texto={ "Histórico" } paginaActual={ Pagina.TERMINADAS }/>
         <Navegacion paginaActual={ Pagina.TERMINADAS } />
         <ListaTODOs data={ listaMock } paginaActual={ Pagina.TERMINADAS } />
     </div>

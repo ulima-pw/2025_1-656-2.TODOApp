@@ -1,7 +1,9 @@
 import { useState } from "react"
+import { Pagina } from "./ListaTODOs"
 
 interface TituloProps {
     texto : string
+    paginaActual : Pagina
 }
 
 
@@ -12,8 +14,12 @@ const Titulo = (props : TituloProps) => {
         setContadorClicks(contadorClicks + 1)
     }
 
-    return <h1 onClick={ contadorOnClick }>
+    return <h1 className="d-flex justify-content-between align-items-start" onClick={ contadorOnClick }>
         { props.texto + " " + contadorClicks }
+        {
+            props.paginaActual == Pagina.TERMINADAS ? <button className="btn btn-primary mt-3 me-3" type="button">Regresar</button> : ""
+        }
+        
     </h1>
 }
 
