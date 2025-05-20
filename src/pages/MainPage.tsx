@@ -7,7 +7,9 @@ import Titulo from "../components/Titulo"
 const MainPage = () => {
     const titulo = "TODO App"
 
-    const listaTODOsStr = localStorage.getItem("TODOS")
+    localStorage.setItem("FECHA_ULTIMO_INGRESO", JSON.stringify(new Date()))
+
+    const listaTODOsStr = sessionStorage.getItem("TODOS")
     let listaTODOs : TODO[]
     if (listaTODOsStr == null) {
         listaTODOs = []
@@ -29,7 +31,7 @@ const MainPage = () => {
             id : lista.length + 1,
             descripcion : texto
         })
-        localStorage.setItem("TODOS", JSON.stringify(lista))
+        sessionStorage.setItem("TODOS", JSON.stringify(lista))
         setLista([...lista])
     }
 
