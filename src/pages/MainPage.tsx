@@ -7,7 +7,15 @@ import Titulo from "../components/Titulo"
 const MainPage = () => {
     const titulo = "TODO App"
 
-    const [ lista, setLista ] = useState<TODO[]>([])
+    const listaTODOsStr = localStorage.getItem("TODOS")
+    let listaTODOs : TODO[]
+    if (listaTODOsStr == null) {
+        listaTODOs = []
+    }else {
+        listaTODOs = JSON.parse(listaTODOsStr)
+    }
+
+    const [ lista, setLista ] = useState<TODO[]>(listaTODOs)
 
     /*const lista : TODO[] = [
         { id : 1, descripcion : "Ir al cine" },
