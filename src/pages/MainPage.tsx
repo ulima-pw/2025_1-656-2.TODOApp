@@ -29,6 +29,7 @@ const MainPage = () => {
             id : lista.length + 1,
             descripcion : texto
         })
+        localStorage.setItem("TODOS", JSON.stringify(lista))
         setLista([...lista])
     }
 

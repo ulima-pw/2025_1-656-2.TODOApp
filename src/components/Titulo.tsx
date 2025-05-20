@@ -26,6 +26,7 @@ const Titulo = (props : TituloProps) => {
             props.paginaActual == Pagina.TERMINADAS 
                 ? <button className="btn btn-primary mt-3 me-3" 
                     onClick={ () => {
+                        localStorage.removeItem("TODOS")
                         navigate("/")
                     } }
                     type="button">
