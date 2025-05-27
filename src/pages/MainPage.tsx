@@ -1,29 +1,35 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Formulario from "../components/Formulario"
 import ListaTODOs, { Pagina, type TODO } from "../components/ListaTODOs"
 import Navegacion from "../components/Navegacion"
 import Titulo from "../components/Titulo"
 
+const URL = "https://script.google.com/macros/s/AKfycbxR06kwYzBmVIy9NoLCq1ddnLj4PIT9uGvPNiK_I5aAob7qrYUs-Q7XPfLab3Lk1ZD9KQ/exec"
+
 const MainPage = () => {
     const titulo = "TODO App"
 
-    localStorage.setItem("FECHA_ULTIMO_INGRESO", JSON.stringify(new Date()))
+    const [ lista, setLista ] = useState<TODO[]>([])
 
-    const listaTODOsStr = sessionStorage.getItem("TODOS")
-    let listaTODOs : TODO[]
-    if (listaTODOsStr == null) {
-        listaTODOs = []
-    }else {
-        listaTODOs = JSON.parse(listaTODOsStr)
+    const httpObtenerTODOs = async () => {
+        const response = await fetch(URL)
+        const data = await response.json()
+        setLista(data)
     }
 
-    const [ lista, setLista ] = useState<TODO[]>(listaTODOs)
+    const httpGuardarTODO = async (id : number, desc : string) => {
+        const todo = {
+            id : id,
+            descripcion : desc
+        }
+        const response = await fetch(URL, {
+            method : "post",
+            body : JSON.stringify(todo)
+        })
 
-    /*const lista : TODO[] = [
-        { id : 1, descripcion : "Ir al cine" },
-        { id : 2, descripcion : "Limpiar la casa"},
-        { id : 3, descripcion : "Dormir"}
-    ]*/
+        const data = await response.json()
+        console.log(data)
+    }
 
     const agregarTODO = (texto : string) => {
         console.log("se ejecuta")
@@ -33,7 +39,12 @@ const MainPage = () => {
         })
         sessionStorage.setItem("TODOS", JSON.stringify(lista))
         setLista([...lista])
+        httpGuardarTODO(lista.length + 1, texto)
     }
+
+    useEffect(() => {
+        httpObtenerTODOs()
+    }, [])
 
     return <div className="container">
         <Titulo texto={ titulo } paginaActual={ Pagina.MAIN }/>
