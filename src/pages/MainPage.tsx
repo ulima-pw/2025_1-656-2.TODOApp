@@ -4,7 +4,7 @@ import ListaTODOs, { Pagina, type TODO } from "../components/ListaTODOs"
 import Navegacion from "../components/Navegacion"
 import Titulo from "../components/Titulo"
 
-const URL = "https://script.google.com/macros/s/AKfycbxR06kwYzBmVIy9NoLCq1ddnLj4PIT9uGvPNiK_I5aAob7qrYUs-Q7XPfLab3Lk1ZD9KQ/exec"
+const URL = "http://localhost:5000" // URL Base
 
 const MainPage = () => {
     const titulo = "TODO App"
@@ -12,18 +12,21 @@ const MainPage = () => {
     const [ lista, setLista ] = useState<TODO[]>([])
 
     const httpObtenerTODOs = async () => {
-        const response = await fetch(URL)
+        const response = await fetch(`${URL}/todos`)
         const data = await response.json()
         setLista(data)
     }
 
-    const httpGuardarTODO = async (id : number, desc : string) => {
+    const httpGuardarTODO = async (desc : string) => {
         const todo = {
-            id : id,
-            descripcion : desc
+            descripcion : desc,
+            estado : 0 // estado inicial de TODO
         }
-        const response = await fetch(URL, {
+        const response = await fetch(`${URL}/todos`, {
             method : "post",
+            headers : {
+                "Content-Type" : "application/json"
+            },
             body : JSON.stringify(todo)
         })
 
@@ -31,15 +34,9 @@ const MainPage = () => {
         console.log(data)
     }
 
-    const agregarTODO = (texto : string) => {
-        console.log("se ejecuta")
-        lista.push({
-            id : lista.length + 1,
-            descripcion : texto
-        })
-        sessionStorage.setItem("TODOS", JSON.stringify(lista))
-        setLista([...lista])
-        httpGuardarTODO(lista.length + 1, texto)
+    const agregarTODO = async (texto : string) => {
+        await httpGuardarTODO(texto)
+        await httpObtenerTODOs()
     }
 
     useEffect(() => {
