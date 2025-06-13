@@ -12,7 +12,7 @@ const MainPage = () => {
     const [ lista, setLista ] = useState<TODO[]>([])
 
     const httpObtenerTODOs = async () => {
-        const response = await fetch(`${URL}/todos`)
+        const response = await fetch(`${URL}/todos?estado=0`)
         const data = await response.json()
         setLista(data)
     }
@@ -34,8 +34,31 @@ const MainPage = () => {
         console.log(data)
     }
 
+    const httpModificarTODO = async(todo :TODO) => {
+        const response = await fetch(`${URL}/todos`, {
+            method : "put",
+            headers : {
+                "Content-Type" : "application/json"
+            },
+            body : JSON.stringify(todo)
+        })
+
+        const data = await response.json()
+        if (data.msg != "") {
+            console.error(data.msg)
+        }
+    }
+
     const agregarTODO = async (texto : string) => {
         await httpGuardarTODO(texto)
+        await httpObtenerTODOs()
+    }
+
+    const marcarTODO = async (id : number) => {
+        await httpModificarTODO({
+            id : id,
+            estado : 1
+        })
         await httpObtenerTODOs()
     }
 
@@ -47,7 +70,10 @@ const MainPage = () => {
         <Titulo texto={ titulo } paginaActual={ Pagina.MAIN }/>
         <Navegacion paginaActual={ Pagina.MAIN }/>
         <Formulario agregar={ agregarTODO }/>
-        <ListaTODOs data={ lista } paginaActual={ Pagina.MAIN }/>
+        <ListaTODOs 
+            data={ lista } 
+            paginaActual={ Pagina.MAIN }
+            marcarTodoHandler={ marcarTODO }/>
     </div>
 }
 

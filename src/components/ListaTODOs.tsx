@@ -1,6 +1,7 @@
 export interface TODO {
-    id : number,
-    descripcion : string
+    id : number;
+    descripcion? : string;
+    estado? : number
 }
 
 export enum Pagina {
@@ -10,6 +11,7 @@ export enum Pagina {
 interface ListaTODOsProps {
     data : TODO[]
     paginaActual : Pagina
+    marcarTodoHandler? : (id : number) => void
 }
 
 const ListaTODOs = (props : ListaTODOsProps) => {
@@ -22,7 +24,15 @@ const ListaTODOs = (props : ListaTODOsProps) => {
                             { elemento.descripcion }
                         </div>
                         {
-                            props.paginaActual == Pagina.MAIN  ? <input className="form-check-input" type="checkbox" /> : ""
+                            props.paginaActual == Pagina.MAIN  ? 
+                                <input className="form-check-input" 
+                                    type="checkbox" 
+                                    onClick={ () => {
+                                        if (props.marcarTodoHandler != undefined) {
+                                            props.marcarTodoHandler(elemento.id)
+                                        }
+                                    }} /> : 
+                                ""
                         }
                         
                     </li>
