@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import Formulario from "../components/Formulario"
+import Formulario, { type Project } from "../components/Formulario"
 import ListaTODOs, { Pagina, type TODO } from "../components/ListaTODOs"
 import Navegacion from "../components/Navegacion"
 import Titulo from "../components/Titulo"
@@ -10,6 +10,7 @@ const MainPage = () => {
     const titulo = "TODO App"
 
     const [ lista, setLista ] = useState<TODO[]>([])
+    const [ projects, setProjects ] = useState<Project[]>([])
 
     const httpObtenerTODOs = async () => {
         const response = await fetch(`${URL}/todos?estado=0`)
@@ -62,14 +63,29 @@ const MainPage = () => {
         await httpObtenerTODOs()
     }
 
+    const fetchProjects = async () => {
+        const response = await fetch(`${URL}/projects`)
+        const data = await response.json()
+        setProjects(data)
+    }
+
+    const handleProjectChange = (projectId: string) => {
+        console.log("Selected project:", projectId)
+    }
+
     useEffect(() => {
         httpObtenerTODOs()
+        fetchProjects()
     }, [])
 
     return <div className="container">
         <Titulo texto={ titulo } paginaActual={ Pagina.MAIN }/>
         <Navegacion paginaActual={ Pagina.MAIN }/>
-        <Formulario agregar={ agregarTODO }/>
+        <Formulario
+            agregar={agregarTODO}
+            projects={projects}
+            onProjectChange={handleProjectChange}
+        />
         <ListaTODOs 
             data={ lista } 
             paginaActual={ Pagina.MAIN }
