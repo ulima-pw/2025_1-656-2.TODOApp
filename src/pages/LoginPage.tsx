@@ -1,13 +1,41 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-// Define (not implement) a function to make a login HTTP request
-function loginRequest(username: string, password: string): void {
-    // TODO: Implement HTTP request to backend for login
-}
+const URL = "http://localhost:5000" // URL Base
+
+
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const navigate = useNavigate();
+
+    async function loginRequest(username: string, password: string) : Promise<void> {
+        const resp = await fetch(`${URL}/usuarios/login`, {
+            method : "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+        if (resp.status == 400) {
+            // Error en porque no envio username o password
+            console.error("Username and password are required");
+            return
+        }
+        if (resp.status == 401) {
+            // Error en login
+            console.error("Invalid username or password");
+            return
+        }
+        const data = await resp.json()
+        sessionStorage.setItem("USUARIO", JSON.stringify(data))
+        navigate('/main'); // Redirigir a la página principal
+    }
 
     return (
         <div className="container mt-5" style={{ maxWidth: 400 }}>
@@ -32,7 +60,13 @@ const LoginPage = () => {
                     onChange={e => setPassword(e.target.value)}
                 />
             </div>
-            <button className="btn btn-primary w-100" type="button">
+            <button className="btn btn-primary w-100" 
+                type="button"
+                onClick={
+                    () => {
+                        loginRequest(username, password)
+                    }
+                }>
                 Login
             </button>
         </div>
