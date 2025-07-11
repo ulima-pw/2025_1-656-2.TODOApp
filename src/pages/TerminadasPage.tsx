@@ -3,13 +3,13 @@ import ListaTODOs, { Pagina, type TODO } from "../components/ListaTODOs"
 import Navegacion from "../components/Navegacion"
 import Titulo from "../components/Titulo"
 
-const URL = "http://localhost:5000"
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 const TerminadasPage = () => {
     const [listaTODOsTerminados, setListaTODOsTerminados] = useState<TODO[]>([])
 
     const httpObtenerTODOsTerminados = async () => {
-        const response = await fetch(`${URL}/todos?estado=1`)
+        const response = await fetch(`${BACKEND_URL}/todos?estado=1`)
         const data = await response.json()
         setListaTODOsTerminados(data)
     }

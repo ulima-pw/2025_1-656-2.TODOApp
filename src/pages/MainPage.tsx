@@ -4,7 +4,7 @@ import ListaTODOs, { Pagina, type TODO } from "../components/ListaTODOs"
 import Navegacion from "../components/Navegacion"
 import Titulo from "../components/Titulo"
 
-const URL = "http://localhost:5000" // URL Base
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 const MainPage = () => {
     const titulo = "TODO App"
@@ -13,7 +13,13 @@ const MainPage = () => {
     const [ projects, setProjects ] = useState<Project[]>([])
 
     const httpObtenerTODOs = async () => {
-        const response = await fetch(`${URL}/todos?estado=0`)
+        const usuario = sessionStorage.getItem("USUARIO")
+        if (usuario == null) {
+            // TODO: Mejorar el manejo de la sesion
+            return
+        }
+        const response = await fetch(
+            `${BACKEND_URL}/todos?estado=0&usuarioid=${JSON.parse(usuario).id}`)
         const data = await response.json()
         setLista(data)
     }
@@ -23,7 +29,7 @@ const MainPage = () => {
             descripcion : desc,
             estado : 0 // estado inicial de TODO
         }
-        const response = await fetch(`${URL}/todos`, {
+        const response = await fetch(`${BACKEND_URL}/todos`, {
             method : "post",
             headers : {
                 "Content-Type" : "application/json"
@@ -36,7 +42,7 @@ const MainPage = () => {
     }
 
     const httpModificarTODO = async(todo :TODO) => {
-        const response = await fetch(`${URL}/todos`, {
+        const response = await fetch(`${BACKEND_URL}/todos`, {
             method : "put",
             headers : {
                 "Content-Type" : "application/json"
@@ -64,7 +70,7 @@ const MainPage = () => {
     }
 
     const fetchProjects = async () => {
-        const response = await fetch(`${URL}/projects`)
+        const response = await fetch(`${BACKEND_URL}/projects`)
         const data = await response.json()
         setProjects(data)
     }
