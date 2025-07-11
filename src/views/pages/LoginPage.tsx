@@ -1,39 +1,10 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+import useLoginViewModel from "../../viewmodels/useLoginViewModel";
 
 const LoginPage = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-    const navigate = useNavigate();
-
-    async function loginRequest(username: string, password: string) : Promise<void> {
-        const resp = await fetch(`${BACKEND_URL}/usuarios/login`, {
-            method : "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-        if (resp.status == 400) {
-            // Error en porque no envio username o password
-            console.error("Username and password are required");
-            return
-        }
-        if (resp.status == 401) {
-            // Error en login
-            console.error("Invalid username or password");
-            return
-        }
-        const data = await resp.json()
-        sessionStorage.setItem("USUARIO", JSON.stringify(data))
-        navigate('/main'); // Redirigir a la página principal
-    }
+    const { username, setUsername,
+        password, setPassword,
+        loginRequest
+     } = useLoginViewModel()
 
     return (
         <div className="container mt-5" style={{ maxWidth: 400 }}>
